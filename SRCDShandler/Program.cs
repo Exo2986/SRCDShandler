@@ -21,6 +21,7 @@ namespace SRCDShandler
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         static void Init() {
+            Console.Title = "SRCDShandler";
             bool success = File.Exists(Properties.Settings.Default.SRCDSPath);
             bool pathSuccess = (Path.GetExtension(Properties.Settings.Default.SRCDSPath) == ".exe");
             if (!success || !pathSuccess)
