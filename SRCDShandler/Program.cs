@@ -59,6 +59,7 @@ namespace SRCDShandler
         static void InitCommands()
         {
             Command changePath = new Command("srcdspath");
+            changePath.RefVar = "SRCDSPath";
             changePath.OnCommandRun = delegate (string[] args)
             {
                 string path = String.Join(" ", args);
@@ -81,6 +82,7 @@ namespace SRCDShandler
             Commands.Add(changePath);
 
             Command changeArgs = new Command("srcdsargs");
+            changeArgs.RefVar = "SRCDSArgs";
             changeArgs.OnCommandRun = delegate (string[] args)
             {
                 if (String.IsNullOrWhiteSpace(String.Join(" ", args)))
@@ -103,6 +105,38 @@ namespace SRCDShandler
                 return;
             };
             Commands.Add(srcdsRestart);
+
+            Command printValue = new Command("printvalue");
+            printValue.OnCommandRun = delegate (string[] args)
+            {
+                Command command = Commands.Find(x => {
+                    if (Regex.IsMatch(args[0], "^" + x.Identifier))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+                if (command != null && !String.IsNullOrWhiteSpace(command.Identifier) && !String.IsNullOrWhiteSpace(command.RefVar) && Properties.Settings.Default[command.RefVar] != null)
+                {
+                    Console.WriteLine(Properties.Settings.Default[command.RefVar]);
+                }
+            };
+            Commands.Add(printValue);
+
+            Command quit = new Command("quit");
+            quit.OnCommandRun = delegate (string[] args)
+            {
+                Console.WriteLine(SRCDS.HasExited);
+                if (!SRCDS.HasExited)
+                {
+                    SRCDS.CloseMainWindow();
+                }
+                Environment.Exit(0);
+            };
+            Commands.Add(quit);
         }
         static void ReadCommands()
         { 

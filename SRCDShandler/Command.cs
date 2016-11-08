@@ -9,6 +9,7 @@ namespace SRCDShandler
     public class Command
     {
         public string Identifier;
+        public string RefVar;
         public Action<string[]> OnCommandRun = delegate (string[] args)
         {
             return;
