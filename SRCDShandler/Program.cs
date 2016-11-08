@@ -19,6 +19,7 @@ namespace SRCDShandler
         public static IntPtr MainWindowHandle;
         public static bool ShouldReadCommands = true;
         public static List<Command> Commands = new List<Command>();
+        public static string SRCDSArgs = null;
 
         public delegate void AsyncReadCommands();
 
@@ -89,10 +90,12 @@ namespace SRCDShandler
                 {
                     Console.WriteLine("SRCDS launch arguments have been reset to default.");
                     Properties.Settings.Default.SRCDSArgs = "-game garrysmod +map gm_construct +gamemode sandbox +maxplayers 16";
+                    SRCDSArgs = Properties.Settings.Default.SRCDSArgs;
                 } else
                 {
                     Console.WriteLine("SRCDS launch arguments have successfully been set.");
                     Properties.Settings.Default.SRCDSArgs = String.Join(" ", args);
+                    SRCDSArgs = Properties.Settings.Default.SRCDSArgs;
                 }
                 Properties.Settings.Default.Save();
             };
@@ -129,7 +132,6 @@ namespace SRCDShandler
             Command quit = new Command("quit");
             quit.OnCommandRun = delegate (string[] args)
             {
-                Console.WriteLine(SRCDS.HasExited);
                 if (!SRCDS.HasExited)
                 {
                     SRCDS.CloseMainWindow();
@@ -165,12 +167,19 @@ namespace SRCDShandler
         }
         static void RunSRCDS()
         {
-            SRCDSPath = Properties.Settings.Default.SRCDSPath;
+            if (SRCDSPath == null)
+            {
+                SRCDSPath = Properties.Settings.Default.SRCDSPath;
+            }
+            if (SRCDSArgs == null)
+            {
+                SRCDSArgs = Properties.Settings.Default.SRCDSArgs;
+            }
             Process process = new Process();
             process.StartInfo.FileName = SRCDSPath;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.Arguments = "-console " + Properties.Settings.Default.SRCDSArgs;
+            process.StartInfo.Arguments = "-console " + SRCDSArgs;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.Start();
             SRCDS = process;
@@ -194,6 +203,51 @@ namespace SRCDShandler
         }
         static void Main(string[] args)
         {
+            List<string> launchArgs = new List<string>();
+            launchArgs.Add("srcdsargs");
+            launchArgs.Add("srcdspath");
+            int index = 0;
+            //Console.WriteLine(String.Join(" ", args));
+            foreach(string arg in args)
+            {
+                foreach(string launchArg in launchArgs)
+                {
+                    if (arg == "-" + launchArg)
+                    {
+                        switch(launchArg)
+                        {
+                            case "srcdsargs":
+                                string pattern = arg + "\\s\"[^\"]+\"";
+                                Match match = Regex.Match(String.Join(" ", args), pattern);
+                                if (match.Success)
+                                {
+                                    string sargs = match.Value;
+                                    sargs = sargs.Replace(arg + " ", "");
+                                    sargs = sargs.Replace("\"", "");
+                                    SRCDSArgs = sargs;
+                                }
+                                break;
+                            case "srcdspath":
+                                pattern = arg + "\\s\"[^\"]+\"";
+                                match = Regex.Match(String.Join(" ", args), pattern);
+                                if (match.Success)
+                                {
+                                    string spath = match.Value;
+                                    spath = spath.Replace(arg + " ", "");
+                                    spath = spath.Replace("\"", "");
+                                    bool success = File.Exists(spath);
+                                    bool pathSuccess = Path.GetExtension(spath) == ".exe";
+                                    if (success && pathSuccess)
+                                    {
+                                        SRCDSPath = spath;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+                index++;
+            }
             Init();
         }
     }
