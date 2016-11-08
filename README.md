@@ -30,12 +30,12 @@ Prints the current value of the specified command if it has a value linked to it
 ```
 -srcdspath "path"
 ```
-Makes the program use the specified path for the current session. This will not work unless there are quotes around the path.
+Makes the program use the specified path for the current session. This will not work unless there are quotes around the path and the quotes are escaped with `\`.
 
 ```
 -srcdsargs "args"
 ```
-Makes the program use the specified launch arguments when launching SRCDS.exe for the current session. This will not work unless there are quotes around the arguments.
+Makes the program use the specified launch arguments when launching SRCDS.exe for the current session. This will not work unless there are quotes around the arguments and the quotes are escaped with `\`.
 
 ## Usage Example
 
