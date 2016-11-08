@@ -61,7 +61,7 @@ namespace SRCDShandler
             Command changePath = new Command("srcdspath");
             changePath.OnCommandRun = delegate (string[] args)
             {
-                string path = args[0];
+                string path = String.Join(" ", args);
                 bool success = File.Exists(path);
                 bool pathSuccess = (Path.GetExtension(path) == ".exe");
                 if (!success || !pathSuccess)
