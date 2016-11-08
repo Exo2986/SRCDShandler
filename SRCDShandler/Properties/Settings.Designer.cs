@@ -34,5 +34,17 @@ namespace SRCDShandler.Properties {
                 this["SRCDSPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-game garrysmod +map gm_construct +gamemode sandbox +maxplayers 16")]
+        public string SRCDSArgs {
+            get {
+                return ((string)(this["SRCDSArgs"]));
+            }
+            set {
+                this["SRCDSArgs"] = value;
+            }
+        }
     }
 }

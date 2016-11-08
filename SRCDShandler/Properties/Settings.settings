@@ -5,5 +5,8 @@
     <Setting Name="SRCDSPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="SRCDSArgs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">-game garrysmod +map gm_construct +gamemode sandbox +maxplayers 16</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
