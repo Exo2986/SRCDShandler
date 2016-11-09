@@ -46,5 +46,17 @@ namespace SRCDShandler.Properties {
                 this["SRCDSArgs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HandlerMinimize {
+            get {
+                return ((bool)(this["HandlerMinimize"]));
+            }
+            set {
+                this["HandlerMinimize"] = value;
+            }
+        }
     }
 }

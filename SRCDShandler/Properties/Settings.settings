@@ -8,5 +8,8 @@
     <Setting Name="SRCDSArgs" Type="System.String" Scope="User">
       <Value Profile="(Default)">-game garrysmod +map gm_construct +gamemode sandbox +maxplayers 16</Value>
     </Setting>
+    <Setting Name="HandlerMinimize" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

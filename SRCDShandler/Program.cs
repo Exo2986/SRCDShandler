@@ -101,6 +101,19 @@ namespace SRCDShandler
             };
             Commands.Add(changeArgs);
 
+            Command shouldMinimize = new Command("handlerminimize");
+            shouldMinimize.RefVar = "HandlerMinimize";
+            shouldMinimize.OnCommandRun = delegate (string[] args)
+            {
+                if (args[0].ToLowerInvariant() == "true" || args[0].ToLowerInvariant() == "false" || args[0].ToLowerInvariant() == "1" || args[0].ToLowerInvariant() == "0")
+                {
+                    Properties.Settings.Default.HandlerMinimize = (args[0].ToLowerInvariant() == "true" || args[0].ToLowerInvariant() == "1");
+                    Properties.Settings.Default.Save();
+                }
+                return;
+            };
+            Commands.Add(shouldMinimize);
+
             Command srcdsRestart = new Command("srcdsrestart");
             srcdsRestart.OnCommandRun = delegate (string[] args)
             {
@@ -184,8 +197,11 @@ namespace SRCDShandler
             process.Start();
             SRCDS = process;
 
-            MainWindowHandle = Process.GetCurrentProcess().MainWindowHandle;
-            ShowWindow(MainWindowHandle, 2);
+            if (Properties.Settings.Default.HandlerMinimize)
+            {
+                MainWindowHandle = Process.GetCurrentProcess().MainWindowHandle;
+                ShowWindow(MainWindowHandle, 2);
+            }
 
             process.WaitForExit();
 
